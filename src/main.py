@@ -91,8 +91,8 @@ if __name__ == "__main__":
         os.system('cls' if os.name == 'nt' else 'clear')
 
         line()
-        print("      Life Simulator aka Cellular Automaton")
-        print("                  BETA v 1.0     ")
+        print("        Cellular Automaton BETA v 1.0     ")
+        print("      \u001b[1mAuthor: Itcor (Aleksandr Shewchuk)\u001b[0m")
         line()
         print("Commands:")
         print("-lang [en/ru/es]  -  Change language")
