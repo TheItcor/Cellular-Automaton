@@ -51,29 +51,79 @@ class CellAutomaton:
 def line():
     print("\u001b[33m" + "===============================================" + "\u001b[0m")
 
+def check_language():
+    try:
+        with open("data.txt", 'r', encoding='utf-8') as file:
+            first_line = file.readline().strip()
+            
+            if not first_line:
+                print("Файл пустой. Используем язык по умолчанию 'en'")
+                return 'en'
+                
+            language = first_line[:2].lower()
+            
+            # Проверка на допустимые коды языков (опционально)
+            valid_languages = ['en', 'ru', 'es']
+            if language not in valid_languages:
+                print(f"Неизвестный код языка '{language}'. Используем 'en'")
+                return 'en'
+                
+            return language
+            
+    except FileNotFoundError:
+        print(f"Файл не найден. Используем язык по умолчанию 'en'")
+        return 'en'
+
 
 
 if __name__ == "__main__":
+    language = check_language()
+    version = "BETA v 1.0"
+    height = 50
+    width = 40
+    times = 101
+
+
+
     ## Menu
-    line()
-    print("      Life Simulator aka Cellular Automaton")
-    print("")
-    line()
+    run = True
+    while run:
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+        line()
+        print("      Life Simulator aka Cellular Automaton")
+        print("                  BETA v 1.0     ")
+        line()
+        print("Commands:")
+        print("-lang [en/ru/es]  -  Change language")
+        print(f"-setb [width] [height] - Change box size [{width}/{height}]")
+        print(f"-setg [number] - How manu generatings be [{times}]")
+        print("-start")
+        line()
+        print("Enter your command:")
+
+        command = input("> ").split()
+        match (command[0]):
+            case "-lang":
+                print("Changes!")
+
+            case "-setb":
+                height = int(command[1])
+                width = int(command[2])
+
+            case "-setg":
+                times = int(command[1])    
+
+            case "-start":
+                run = False
 
 
-    input()
 
-
-
-
-
-    automaton = CellAutomaton(40, 20)
+    automaton = CellAutomaton(height, width)
     automaton.initialize_randomly()
     
-    for generation in range(1, 101):
+    for generation in range(1, times):
         print(f"Generation: {generation}")
         automaton.print_grid()
         automaton.next_generation()
         time.sleep(0.2)
-
-
