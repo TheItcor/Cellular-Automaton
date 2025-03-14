@@ -93,7 +93,7 @@ if __name__ == "__main__":
             os.system('cls' if os.name == 'nt' else 'clear')
 
             line()
-            print("      Cellular Automaton BETA v 1.0     ")
+            print("      Cellular Automaton BETA v 1.1     ")
             print("      \u001b[1mAuthor: Itcor (Aleksandr Shewchuk)\u001b[0m")
             line()
             print("Commands:")
