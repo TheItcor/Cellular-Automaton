@@ -86,44 +86,50 @@ if __name__ == "__main__":
 
 
     ## Menu
+    menu = True
     run = True
     while run:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        while menu:
+            os.system('cls' if os.name == 'nt' else 'clear')
 
-        line()
-        print("        Cellular Automaton BETA v 1.0     ")
-        print("      \u001b[1mAuthor: Itcor (Aleksandr Shewchuk)\u001b[0m")
-        line()
-        print("Commands:")
-        print("-lang [en/ru/es]  -  Change language")
-        print(f"-setb [width] [height] - Change box size [{width}/{height}]")
-        print(f"-setg [number] - How manu generatings be [{times}]")
-        print("-start")
-        line()
-        print("Enter your command:")
+            line()
+            print("      Cellular Automaton BETA v 1.0     ")
+            print("      \u001b[1mAuthor: Itcor (Aleksandr Shewchuk)\u001b[0m")
+            line()
+            print("Commands:")
+            print("-lang [en/ru/es]  -  Change language")
+            print(f"-setb [width] [height] - Change box size [{width}/{height}]")
+            print(f"-setg [number] - How manu generatings be [{times}]")
+            print("-start")
+            line()
+            print("Enter your command:")
 
-        command = input("> ").split()
-        match (command[0]):
-            case "-lang":
-                print("Changes!")
+            command = input("> ").split()
+            match (command[0]):
+                case "-lang":
+                    print("Changes!")
 
-            case "-setb":
-                height = int(command[1])
-                width = int(command[2])
+                case "-setb":
+                    height = int(command[1])
+                    width = int(command[2])
 
-            case "-setg":
-                times = int(command[1])    
+                case "-setg":
+                    times = int(command[1])    
 
-            case "-start":
-                run = False
+                case "-start":
+                    menu = False
 
+        
+        ## Starting 
+        automaton = CellAutomaton(height, width)
+        automaton.initialize_randomly()
+            
+        for generation in range(1, times):
+            print(f"Generation: {generation}")
+            automaton.print_grid()
+            automaton.next_generation()
+            time.sleep(0.2)
 
-
-    automaton = CellAutomaton(height, width)
-    automaton.initialize_randomly()
-    
-    for generation in range(1, times):
-        print(f"Generation: {generation}")
-        automaton.print_grid()
-        automaton.next_generation()
-        time.sleep(0.2)
+        print("End of generations")
+        input("Enter for continue")    
+        menu = 1
