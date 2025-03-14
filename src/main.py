@@ -1,6 +1,10 @@
 import random
 import time
 import os
+from language import *
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 class CellAutomaton:
     def __init__(self, width, height):
@@ -16,8 +20,8 @@ class CellAutomaton:
     
 
     def print_grid(self):
-        os.system('cls' if os.name == 'nt' else 'clear')  
-        ## Clear screen
+        clear()  
+        
         for row in self.grid:
             print(' '.join('▓' if cell else '░' for cell in row))
         print()
@@ -51,34 +55,29 @@ class CellAutomaton:
 def line():
     print("\u001b[33m" + "===============================================" + "\u001b[0m")
 
+
 def check_language():
     try:
         with open("data.txt", 'r', encoding='utf-8') as file:
             first_line = file.readline().strip()
             
             if not first_line:
-                print("Файл пустой. Используем язык по умолчанию 'en'")
                 return 'en'
                 
             language = first_line[:2].lower()
-            
-            # Проверка на допустимые коды языков (опционально)
-            valid_languages = ['en', 'ru', 'es']
-            if language not in valid_languages:
-                print(f"Неизвестный код языка '{language}'. Используем 'en'")
-                return 'en'
                 
             return language
             
     except FileNotFoundError:
-        print(f"Файл не найден. Используем язык по умолчанию 'en'")
         return 'en'
 
 
+language = check_language()
+tr = lambda key: translate(language, key)
+
 
 if __name__ == "__main__":
-    language = check_language()
-    version = "BETA v 1.0"
+    version = "      Cellular Automaton BETA v 1.2     "
     height = 50
     width = 40
     times = 101
@@ -90,33 +89,53 @@ if __name__ == "__main__":
     run = True
     while run:
         while menu:
-            os.system('cls' if os.name == 'nt' else 'clear')
+            language = check_language()
+            clear()
 
             line()
-            print("      Cellular Automaton BETA v 1.1     ")
+            print(version)
             print("      \u001b[1mAuthor: Itcor (Aleksandr Shewchuk)\u001b[0m")
             line()
             print("Commands:")
-            print("-lang [en/ru/es]  -  Change language")
-            print(f"-setb [width] [height] - Change box size [{width}/{height}]")
-            print(f"-setg [number] - How manu generatings be [{times}]")
-            print("-start")
+            print(f"-lang  - ", tr("change_lang"))
+            print("-setb", tr('wid_hei_bx') , f"[{width}/{height}]")
+            print("-setg", tr('num_of_gen'), f"[{times}]")
+            print("-start", tr('start'))
             line()
-            print("Enter your command:")
+            print(tr("enter_button"))
 
             command = input("> ").split()
             match (command[0]):
                 case "-lang":
-                    print("Changes!")
+                    ## Choice of language
+                    clear()
+                    line()
+                    print(tr("choice_lang"))
+                    print(all_language)
+                    print(tr("example_lang"))
+                    line()
+
+                    language_choice = input()
+
+                    with open('data.txt', 'r') as f:
+                        lines = f.readlines()
+
+                    new_lines = [f"{language_choice}\n"] + lines[1:]
+
+                    with open('data.txt', 'w') as f:
+                        f.writelines(new_lines)
 
                 case "-setb":
+                    ## Settings for box
                     height = int(command[1])
                     width = int(command[2])
 
                 case "-setg":
+                    ## Settings for generations
                     times = int(command[1])    
 
                 case "-start":
+                    ## Start
                     menu = False
 
         
@@ -125,11 +144,11 @@ if __name__ == "__main__":
         automaton.initialize_randomly()
             
         for generation in range(1, times):
-            print(f"Generation: {generation}")
+            print(tr('gen'), f"{generation}")
             automaton.print_grid()
             automaton.next_generation()
             time.sleep(0.2)
 
-        print("End of generations")
-        input("Enter for continue")    
+        print(tr('end'))
+        input(tr('enter'))    
         menu = 1
