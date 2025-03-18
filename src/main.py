@@ -3,6 +3,8 @@ import time
 import os
 from language import *
 
+seed = random.randint(1, 999999999999999999)
+
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -23,7 +25,7 @@ class CellAutomaton:
         clear()  
         
         for row in self.grid:
-            print(' '.join('▓' if cell else '░' for cell in row))
+            print(''.join('#' if cell else ' ' for cell in row))
         print()
     
 
@@ -77,10 +79,10 @@ tr = lambda key: translate(language, key)
 
 
 if __name__ == "__main__":
-    version = "      Cellular Automaton BETA v 1.2     "
-    height = 50
-    width = 40
-    times = 101
+    version = "      Cellular Automaton BETA v 1.3     "
+    height = 30
+    width = 30
+    times = 100
 
 
 
@@ -98,8 +100,9 @@ if __name__ == "__main__":
             line()
             print("Commands:")
             print(f"-lang  - ", tr("change_lang"))
-            print("-setb", tr('wid_hei_bx') , f"[{width}/{height}]")
-            print("-setg", tr('num_of_gen'), f"[{times}]")
+            print("-setbox", tr('wid_hei_bx') , f"[{width}/{height}]")
+            print("-setgen", tr('num_of_gen'), f"[{times}]")
+            print("-setseed", tr('seed'))
             print("-start", tr('start'))
             line()
             print(tr("enter_button"))
@@ -125,14 +128,19 @@ if __name__ == "__main__":
                     with open('data.txt', 'w') as f:
                         f.writelines(new_lines)
 
-                case "-setb":
+                case "-setbox":
                     ## Settings for box
                     height = int(command[1])
                     width = int(command[2])
 
-                case "-setg":
+                case "-setgen":
                     ## Settings for generations
                     times = int(command[1])    
+
+                case "-setseed":
+                    ## Seed for generatins
+                    seed = int(command[1])
+                    random.seed(seed)
 
                 case "-start":
                     ## Start
@@ -143,11 +151,12 @@ if __name__ == "__main__":
         automaton = CellAutomaton(height, width)
         automaton.initialize_randomly()
             
-        for generation in range(1, times):
-            print(tr('gen'), f"{generation}")
+        for generation in range(1, times+1):
             automaton.print_grid()
             automaton.next_generation()
-            time.sleep(0.2)
+            print(tr('gen'), f"{generation}")
+            print(f"Seed: {seed}")
+            time.sleep(0.5)
 
         print(tr('end'))
         input(tr('enter'))    
